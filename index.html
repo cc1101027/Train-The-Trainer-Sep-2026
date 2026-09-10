@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maximize Cashback — Self-Profile Worksheet</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap');
+
+:root{
+  --navy: #10142A;
+  --navy-2: #171D3C;
+  --navy-3: #1F2650;
+  --gold: #E8B54C;
+  --gold-dim: #7A5F26;
+  --teal: #3FB8AF;
+  --ink: #F5F3EC;
+  --muted: #8B92B4;
+  --line: #2A3160;
+  --err: #E8735A;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background: var(--navy);
+  color: var(--ink);
+  font-family:'Inter', sans-serif;
+  line-height:1.5;
+}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px 80px;}
+
+/* HERO */
+.hero{
+  padding:56px 20px 40px;
+  text-align:left;
+  border-bottom:1px solid var(--line);
+  background:
+    radial-gradient(circle at 85% -10%, rgba(232,181,76,0.14), transparent 55%),
+    var(--navy);
+}
+.hero-inner{max-width:720px;margin:0 auto;}
+.eyebrow{
+  font-family:'Sora',sans-serif;
+  font-weight:700;
+  font-size:13px;
+  letter-spacing:0.14em;
+  color:var(--gold);
+}
+.hero h1{
+  font-family:'Sora',sans-serif;
+  font-weight:800;
+  font-size:clamp(30px,6vw,44px);
+  line-height:1.08;
+  margin:14px 0 12px;
+}
+.hero p{
+  color:var(--muted);
+  font-size:16px;
+  max-width:52ch;
+  margin:0;
+}
+
+/* PROGRESS */
+.progress{
+  display:flex;
+  gap:6px;
+  max-width:720px;
+  margin:28px auto 0;
+  padding:0 20px;
+}
+.progress .seg{
+  flex:1;
+  height:3px;
+  background:var(--line);
+  border-radius:2px;
+  overflow:hidden;
+}
+.progress .seg i{
+  display:block;
+  height:100%;
+  width:0%;
+  background:var(--gold);
+  transition:width .35s ease;
+}
+
+/* STEP */
+.step{
+  padding:44px 0 8px;
+  border-bottom:1px solid var(--line);
+}
+.step:last-of-type{border-bottom:none;}
+.step-head{
+  display:flex;
+  align-items:baseline;
+  gap:16px;
+  margin-bottom:22px;
+}
+.step-num{
+  font-family:'Sora',sans-serif;
+  font-weight:800;
+  font-size:15px;
+  color:var(--gold);
+  letter-spacing:0.08em;
+}
+.step-title{
+  font-family:'Sora',sans-serif;
+  font-weight:700;
+  font-size:22px;
+}
+.sub{
+  color:var(--muted);
+  font-size:14px;
+  margin:-14px 0 22px;
+}
+
+/* FIELD GROUPS */
+.field-label{
+  font-size:13px;
+  font-weight:600;
+  color:var(--muted);
+  margin:22px 0 10px;
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+}
+.choice-row{display:flex;flex-direction:column;gap:10px;}
+.choice{
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+  padding:14px 16px;
+  border:1px solid var(--line);
+  border-radius:8px;
+  cursor:pointer;
+  transition:border-color .15s ease, background .15s ease;
+}
+.choice:hover{border-color:var(--gold-dim);}
+.choice.sel{
+  border-color:var(--gold);
+  background:rgba(232,181,76,0.07);
+}
+.choice input{margin-top:3px; accent-color: var(--gold);}
+.choice .ct{
+  font-weight:600;
+  font-size:15px;
+}
+.choice .cd{
+  color:var(--muted);
+  font-size:13px;
+  margin-top:2px;
+}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;}
+@media(max-width:520px){.grid2{grid-template-columns:1fr;}}
+.num-field label{
+  display:block;font-size:13px;color:var(--muted);margin-bottom:6px;
+}
+.num-field .input-row{
+  display:flex;align-items:center;
+  border:1px solid var(--line);
+  border-radius:7px;
+  overflow:hidden;
+  background:var(--navy-2);
+}
+.num-field .rm{
+  padding:11px 10px;
+  font-size:13px;
+  color:var(--muted);
+  border-right:1px solid var(--line);
+}
+.num-field input{
+  flex:1;
+  background:transparent;
+  border:none;
+  outline:none;
+  color:var(--ink);
+  font-family:'Inter',sans-serif;
+  font-size:15px;
+  padding:11px 10px;
+  min-width:0;
+}
+
+.btn-row{margin-top:30px;display:flex;gap:12px;flex-wrap:wrap;}
+.btn{
+  font-family:'Sora',sans-serif;
+  font-weight:700;
+  font-size:14px;
+  padding:14px 26px;
+  border-radius:7px;
+  border:1px solid var(--gold);
+  background:var(--gold);
+  color:var(--navy);
+  cursor:pointer;
+  letter-spacing:0.01em;
+}
+.btn.ghost{
+  background:transparent;
+  color:var(--ink);
+  border-color:var(--line);
+}
+.btn:disabled{opacity:0.4;cursor:not-allowed;}
+.err-msg{color:var(--err);font-size:13px;margin-top:14px;display:none;}
+
+/* RESULTS */
+#resultsStep{display:none;}
+.recap{
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:16px 18px;
+  margin-bottom:26px;
+  font-size:13px;
+  color:var(--muted);
+}
+.recap b{color:var(--ink);}
+.card-result{
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:22px;
+  margin-bottom:18px;
+  position:relative;
+}
+.card-result.top{border-color:var(--gold);}
+.rank-tag{
+  position:absolute; top:-11px; left:20px;
+  background:var(--navy);
+  padding:0 8px;
+  font-family:'Sora',sans-serif;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:0.08em;
+  color:var(--gold);
+}
+.card-result h3{
+  font-family:'Sora',sans-serif;
+  font-size:19px;
+  margin:6px 0 4px;
+}
+.card-result .issuer{color:var(--muted);font-size:13px;margin-bottom:14px;}
+.why{font-size:14px;color:var(--ink);margin-bottom:16px;}
+.specs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px 16px;
+  font-size:13px;
+}
+.specs .k{color:var(--muted);}
+.specs .v{font-weight:600;}
+.finewrap{
+  margin-top:14px;
+  padding-top:14px;
+  border-top:1px solid var(--line);
+  font-size:12.5px;
+  color:var(--muted);
+}
+
+.prompt-box{
+  border:1px solid var(--teal);
+  border-radius:8px;
+  padding:18px;
+  background:rgba(63,184,175,0.06);
+  font-size:13.5px;
+  color:var(--ink);
+  white-space:pre-wrap;
+  font-family:'Inter',sans-serif;
+  margin-top:12px;
+}
+.copy-btn{
+  font-family:'Sora',sans-serif;
+  font-size:12px;
+  font-weight:700;
+  color:var(--teal);
+  background:transparent;
+  border:1px solid var(--teal);
+  padding:8px 14px;
+  border-radius:6px;
+  cursor:pointer;
+  margin-top:10px;
+}
+.disclaimer{
+  font-size:12px;
+  color:var(--muted);
+  margin-top:26px;
+  padding-top:18px;
+  border-top:1px solid var(--line);
+}
+.quote{
+  font-family:'Sora',sans-serif;
+  font-weight:700;
+  font-size:19px;
+  line-height:1.4;
+  text-align:center;
+  padding:50px 10px 10px;
+  color:var(--ink);
+}
+.quote span{color:var(--gold);}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">MAXIMIZE CASHBACK WITH CREDIT CARD</div>
+    <h1>Know yourself before you ask AI.</h1>
+    <p>Fill in your spending profile below. We'll match you to sample cards on the spot, then generate the exact prompt to take to your AI of choice for a live comparison.</p>
+  </div>
+</div>
+
+<div class="progress" id="progress">
+  <div class="seg"><i id="p1"></i></div>
+  <div class="seg"><i id="p2"></i></div>
+  <div class="seg"><i id="p3"></i></div>
+  <div class="seg"><i id="p4"></i></div>
+</div>
+
+<div class="wrap">
+
+  <!-- STEP 1 -->
+  <div class="step" id="step1">
+    <div class="step-head"><span class="step-num">01</span><span class="step-title">Know Yourself</span></div>
+
+    <div class="field-label">Spending personality</div>
+    <div class="choice-row" id="personalityChoices">
+      <label class="choice" data-name="personality" data-value="meticulous">
+        <input type="radio" name="personality" value="meticulous">
+        <div><div class="ct">Meticulous</div><div class="cd">I track every ringgit, happy to juggle multiple cards for maximum optimisation.</div></div>
+      </label>
+      <label class="choice" data-name="personality" data-value="simple">
+        <input type="radio" name="personality" value="simple">
+        <div><div class="ct">Simple</div><div class="cd">I want 1–2 cards that just work, without needing to think about it.</div></div>
+      </label>
+    </div>
+
+    <div class="field-label">Fixed expenses — recurring, same amount every month</div>
+    <div class="grid2">
+      <div class="num-field"><label>Insurance</label><div class="input-row"><span class="rm">RM</span><input type="number" min="0" id="f_insurance" placeholder="0"></div></div>
+      <div class="num-field"><label>Subscriptions</label><div class="input-row"><span class="rm">RM</span><input type="number" min="0" id="f_subs" placeholder="0"></div></div>
+      <div class="num-field"><label>Utilities</label><div class="input-row"><span class="rm">RM</span><input type="number" min="0" id="f_utilities" placeholder="0"></div></div>
+      <div class="num-field"><label>Groceries</label><div class="input-row"><span class="rm">RM</span><input type="number" min="0" id="f_groceries" placeholder="0"></div></div>
+      <div class="num-field"><label>Petrol</label><div class="input-row"><span class="rm">RM</span><input type="number" min="0" id="f_petrol" placeholder="0"></div></div>
+    </div>
+
+    <div class="field-label">Variable expenses — fluctuates month to month</div>
+    <div class="grid2">
+      <div class="num-field"><label>Dining</label><div class="input-row"><span class="rm">RM</span><input type="number" min="0" id="v_dining" placeholder="0"></div></div>
+      <div class="num-field"><label>Online shopping</label><div class="input-row"><span class="rm">RM</span><input type="number" min="0" id="v_online" placeholder="0"></div></div>
+      <div class="num-field"><label>Retail shopping</label><div class="input-row"><span class="rm">RM</span><input type="number" min="0" id="v_retail" placeholder="0"></div></div>
+      <div class="num-field"><label>Entertainment</label><div class="input-row"><span class="rm">RM</span><input type="number" min="0" id="v_entertainment" placeholder="0"></div></div>
+    </div>
+
+    <div class="err-msg" id="err1">Pick a spending personality and enter at least one expense to continue.</div>
+    <div class="btn-row"><button class="btn" onclick="goStep(2)">Continue</button></div>
+  </div>
+
+  <!-- STEP 2 -->
+  <div class="step" id="step2" style="display:none;">
+    <div class="step-head"><span class="step-num">02</span><span class="step-title">Type of Credit Card</span></div>
+    <div class="sub">Based on your dominant category, which type fits you best?</div>
+    <div class="choice-row" id="typeChoices">
+      <label class="choice" data-name="type" data-value="cashback">
+        <input type="radio" name="type" value="cashback">
+        <div><div class="ct">Cashback</div><div class="cd">Best for groceries, dining, petrol, online shopping.</div></div>
+      </label>
+      <label class="choice" data-name="type" data-value="rewards">
+        <input type="radio" name="type" value="rewards">
+        <div><div class="ct">Rewards Points</div><div class="cd">Best for big, planned purchases.</div></div>
+      </label>
+      <label class="choice" data-name="type" data-value="travel">
+        <input type="radio" name="type" value="travel">
+        <div><div class="ct">Travel</div><div class="cd">Best for frequent flyers.</div></div>
+      </label>
+      <label class="choice" data-name="type" data-value="islamic">
+        <input type="radio" name="type" value="islamic">
+        <div><div class="ct">Islamic</div><div class="cd">Shariah-compliant, any spending pattern.</div></div>
+      </label>
+    </div>
+    <div class="err-msg" id="err2">Pick a card type to continue.</div>
+    <div class="btn-row">
+      <button class="btn ghost" onclick="goStep(1)">Back</button>
+      <button class="btn" onclick="goStep(3)">Continue</button>
+    </div>
+  </div>
+
+  <!-- STEP 3 -->
+  <div class="step" id="step3" style="display:none;">
+    <div class="step-head"><span class="step-num">03</span><span class="step-title">Minimum Income Requirement</span></div>
+    <div class="sub">My rough annual income falls under:</div>
+    <div class="choice-row" id="incomeChoices">
+      <label class="choice" data-name="income" data-value="entry">
+        <input type="radio" name="income" value="entry">
+        <div><div class="ct">Entry-Level</div><div class="cd">RM2k–3k / month</div></div>
+      </label>
+      <label class="choice" data-name="income" data-value="mid">
+        <input type="radio" name="income" value="mid">
+        <div><div class="ct">Mid-Tier</div><div class="cd">RM3k–5k / month</div></div>
+      </label>
+      <label class="choice" data-name="income" data-value="premium">
+        <input type="radio" name="income" value="premium">
+        <div><div class="ct">Premium</div><div class="cd">RM5k+ / month</div></div>
+      </label>
+    </div>
+    <div class="err-msg" id="err3">Pick an income tier to continue.</div>
+    <div class="btn-row">
+      <button class="btn ghost" onclick="goStep(2)">Back</button>
+      <button class="btn" onclick="generateResults()">Craft the Prompt →</button>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div class="step" id="resultsStep">
+    <div class="step-head"><span class="step-num">04</span><span class="step-title">Your Results</span></div>
+
+    <div class="recap" id="recap"></div>
+
+    <div class="field-label">Sample matches (illustrative)</div>
+    <div id="cardResults"></div>
+
+    <div class="field-label">Your crafted prompt — take this to your AI of choice</div>
+    <div class="prompt-box" id="promptBox"></div>
+    <button class="copy-btn" onclick="copyPrompt()">Copy prompt</button>
+
+    <div class="disclaimer">Card names, fees and rates above are simplified training examples, not live offers. Always confirm current terms on RinggitPlus or the issuing bank's site before applying.</div>
+
+    <div class="btn-row">
+      <button class="btn ghost" onclick="goStep(3)">Back</button>
+      <button class="btn ghost" onclick="restart()">Start over</button>
+    </div>
+  </div>
+
+  <div class="quote">“The best credit card isn't the one that gives <span>the most</span>.<br>It's the one that gives <span>you</span> the most.”</div>
+
+</div>
+
+<script>
+// ---------- selection wiring ----------
+document.querySelectorAll('.choice').forEach(function(el){
+  el.addEventListener('click', function(){
+    var name = el.getAttribute('data-name');
+    document.querySelectorAll('.choice[data-name="'+name+'"]').forEach(function(o){o.classList.remove('sel');});
+    el.classList.add('sel');
+    el.querySelector('input').checked = true;
+  });
+});
+
+var state = {step:1};
+var PROGRESS_W = {1:'10%',2:'100%',3:'100%',4:'100%'};
+
+function setProgress(step){
+  document.getElementById('p1').style.width = step>=1 ? '100%':'0%';
+  document.getElementById('p2').style.width = step>=2 ? '100%':'0%';
+  document.getElementById('p3').style.width = step>=3 ? '100%':'0%';
+  document.getElementById('p4').style.width = step>=4 ? '100%':'0%';
+}
+
+function getVal(id){ var v = document.getElementById(id).value; return v === '' ? 0 : parseFloat(v); }
+
+function goStep(n){
+  if(state.step === 1 && n === 2){
+    var personality = document.querySelector('input[name="personality"]:checked');
+    var total = getVal('f_insurance')+getVal('f_subs')+getVal('f_utilities')+getVal('f_groceries')+getVal('f_petrol')+
+                getVal('v_dining')+getVal('v_online')+getVal('v_retail')+getVal('v_entertainment');
+    if(!personality || total <= 0){
+      document.getElementById('err1').style.display = 'block';
+      return;
+    }
+    document.getElementById('err1').style.display = 'none';
+  }
+  if(state.step === 2 && n === 3){
+    var type = document.querySelector('input[name="type"]:checked');
+    if(!type){ document.getElementById('err2').style.display='block'; return; }
+    document.getElementById('err2').style.display = 'none';
+  }
+  document.getElementById('step1').style.display = n===1 ? 'block':'none';
+  document.getElementById('step2').style.display = n===2 ? 'block':'none';
+  document.getElementById('step3').style.display = n===3 ? 'block':'none';
+  document.getElementById('resultsStep').style.display = 'none';
+  state.step = n;
+  setProgress(n);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function restart(){
+  document.querySelectorAll('input[type=radio]').forEach(function(r){r.checked=false;});
+  document.querySelectorAll('input[type=number]').forEach(function(r){r.value='';});
+  document.querySelectorAll('.choice').forEach(function(c){c.classList.remove('sel');});
+  goStep(1);
+}
+
+// ---------- card database (illustrative training data) ----------
+var CARDS = [
+  {name:"Everyday Cash Rebate Platinum", issuer:"Sample Bank A", type:"cashback", minIncomeTier:"entry", fee:"RM0 (waived on 12x usage)", rate:"5% on groceries, dining & petrol", cap:"Capped at RM70/month", signup:"RM50 e-voucher on first swipe", categories:["groceries","dining","petrol"], fine:"5% tier only applies to the first RM1,000 spent per category; excess reverts to 0.2%."},
+  {name:"Simply 5% Cashback Visa", issuer:"Sample Bank B", type:"cashback", minIncomeTier:"entry", fee:"RM0 for life", rate:"5% on all retail & online spend", cap:"Capped at RM60/month combined", signup:"None", categories:["online","retail","entertainment"], fine:"Cashback excludes utility bills, insurance and government transactions."},
+  {name:"Petrol & Beyond Mastercard", issuer:"Sample Bank C", type:"cashback", minIncomeTier:"entry", fee:"RM0 (waived on RM6k/year spend)", rate:"8% on petrol, 3% on groceries", cap:"Capped at RM40/month on petrol", signup:"RM30 fuel credit", categories:["petrol","groceries"], fine:"8% petrol rate applies only at 3 named station chains."},
+  {name:"Cash Back-i", issuer:"Sample Islamic Bank", type:"islamic", minIncomeTier:"entry", fee:"RM0 for life", rate:"5% on groceries & dining (Shariah-compliant)", cap:"Capped at RM50/month", signup:"None", categories:["groceries","dining","online"], fine:"Profit-based structure (no interest); late payment charges (ta'widh) still apply."},
+  {name:"Quantum Rewards Visa", issuer:"Sample Bank D", type:"rewards", minIncomeTier:"mid", fee:"RM180 (waived on RM12k/year spend)", rate:"8x points on retail & travel bookings", cap:"No cap, points expire in 3 years", signup:"2,000 bonus points on RM500 spend", categories:["retail","online","entertainment"], fine:"Points redemption for vouchers loses ~15% value versus flight/hotel redemption."},
+  {name:"Preferred Rewards Platinum", issuer:"Sample Bank E", type:"rewards", minIncomeTier:"mid", fee:"RM150 (waived on 6 transactions/year)", rate:"5x points on dining & entertainment", cap:"No cap", signup:"RM100 dining voucher", categories:["dining","entertainment"], fine:"5x rate only on weekends; weekday spend earns base 1x."},
+  {name:"Voyage World Mastercard", issuer:"Sample Bank F", type:"travel", minIncomeTier:"premium", fee:"RM800 (waived on RM40k/year spend)", rate:"1 mile per RM1 on all foreign currency spend", cap:"No cap", signup:"2 complimentary airport lounge visits", categories:["online","entertainment","retail"], fine:"Local spend earns only 0.5 miles per RM1; miles expire in 5 years."},
+  {name:"Horizon Travel Elite", issuer:"Sample Bank G", type:"travel", minIncomeTier:"premium", fee:"RM600 (waived on RM30k/year spend)", rate:"1.4 miles per RM1 on travel & dining", cap:"No cap", signup:"Travel insurance coverage up to RM1 million", categories:["dining","entertainment"], fine:"Miles transfer to airline partners only in blocks of 10,000."},
+  {name:"Ikhwan Everyday-i", issuer:"Sample Islamic Bank", type:"islamic", minIncomeTier:"mid", fee:"RM0 (waived on 1 transaction/month)", rate:"3% on online & retail, 8% on petrol", cap:"Capped at RM50/month total", signup:"None", categories:["online","retail","petrol"], fine:"Ibra' (rebate) rate is reviewed annually and not guaranteed."},
+  {name:"Starter Simple Cashback", issuer:"Sample Bank H", type:"cashback", minIncomeTier:"entry", fee:"RM0 for life", rate:"Flat 1% on all spend, no categories to track", cap:"No cap", signup:"None", categories:["groceries","dining","petrol","online","retail","entertainment"], fine:"Flat rate is lower than category cards — best only if you don't want to track categories."}
+];
+
+var INCOME_RANK = {entry:1, mid:2, premium:3};
+
+function generateResults(){
+  var income = document.querySelector('input[name="income"]:checked');
+  if(!income){ document.getElementById('err3').style.display='block'; return; }
+  document.getElementById('err3').style.display = 'none';
+
+  var personality = document.querySelector('input[name="personality"]:checked').value;
+  var type = document.querySelector('input[name="type"]:checked').value;
+  var incomeTier = income.value;
+
+  var expenses = {
+    groceries: getVal('f_groceries'),
+    petrol: getVal('f_petrol'),
+    dining: getVal('v_dining'),
+    online: getVal('v_online'),
+    retail: getVal('v_retail'),
+    entertainment: getVal('v_entertainment')
+  };
+  var sorted = Object.keys(expenses).sort(function(a,b){return expenses[b]-expenses[a];});
+  var topCats = sorted.filter(function(k){return expenses[k]>0;}).slice(0,2);
+  if(topCats.length===0) topCats = ['groceries'];
+
+  // filter + score cards
+  var eligible = CARDS.filter(function(c){
+    return c.type === type && INCOME_RANK[c.minIncomeTier] <= INCOME_RANK[incomeTier];
+  });
+  if(eligible.length===0){
+    eligible = CARDS.filter(function(c){ return INCOME_RANK[c.minIncomeTier] <= INCOME_RANK[incomeTier]; });
+  }
+  eligible.forEach(function(c){
+    c._score = c.categories.filter(function(cat){return topCats.indexOf(cat)>-1;}).length;
+    if(personality==='simple' && c.categories.length>=5) c._score += 0.5;
+    if(personality==='meticulous' && c.categories.length<=3) c._score += 0.5;
+  });
+  eligible.sort(function(a,b){return b._score - a._score;});
+  var top2 = eligible.slice(0,2);
+
+  // recap
+  var catLabel = {groceries:"Groceries",petrol:"Petrol",dining:"Dining",online:"Online shopping",retail:"Retail shopping",entertainment:"Entertainment"};
+  var totalMonthly = Object.values(expenses).reduce(function(a,b){return a+b;},0) +
+                      getVal('f_insurance')+getVal('f_subs')+getVal('f_utilities');
+  document.getElementById('recap').innerHTML =
+    '<b>Profile:</b> ' + (personality==='simple'?'Simple':'Meticulous') + ' spender · ' +
+    '<b>Top categories:</b> ' + topCats.map(function(c){return catLabel[c];}).join(', ') + ' · ' +
+    '<b>Card type:</b> ' + type.charAt(0).toUpperCase()+type.slice(1) + ' · ' +
+    '<b>Income tier:</b> ' + incomeTier.charAt(0).toUpperCase()+incomeTier.slice(1) + ' · ' +
+    '<b>Total monthly spend entered:</b> RM' + totalMonthly.toLocaleString();
+
+  // cards
+  var html = '';
+  if(top2.length===0){
+    html = '<div class="card-result">No sample card in this training set matches that combination — in real use, this is where the AI prompt below does the searching for you.</div>';
+  } else {
+    top2.forEach(function(c, i){
+      html += '<div class="card-result '+(i===0?'top':'')+'">' +
+        '<span class="rank-tag">'+(i===0?'TOP MATCH':'ALSO CONSIDER')+'</span>' +
+        '<h3>'+c.name+'</h3>' +
+        '<div class="issuer">'+c.issuer+'</div>' +
+        '<div class="why">Matches your spend in <b>'+c.categories.filter(function(cat){return topCats.indexOf(cat)>-1;}).map(function(cat){return catLabel[cat];}).join(' & ')+'</b>, and your income tier qualifies.</div>' +
+        '<div class="specs">' +
+          '<div class="k">Annual fee</div><div class="v">'+c.fee+'</div>' +
+          '<div class="k">Reward rate</div><div class="v">'+c.rate+'</div>' +
+          '<div class="k">Cap</div><div class="v">'+c.cap+'</div>' +
+          '<div class="k">Sign-up bonus</div><div class="v">'+c.signup+'</div>' +
+        '</div>' +
+        '<div class="finewrap"><b>Fine print:</b> '+c.fine+'</div>' +
+      '</div>';
+    });
+  }
+  document.getElementById('cardResults').innerHTML = html;
+
+  // prompt
+  var promptText = 'Based on this spending profile, recommend the top 2 credit cards in Malaysia best suited to me, and explain why each fits — including annual fee, reward rate, minimum income eligibility, sign-up bonus conditions, and any other fine print I should watch out for.\\n\\n' +
+    'My profile:\\n' +
+    '- Spending personality: ' + (personality==='simple'?'Simple — I want 1–2 cards that just work':'Meticulous — I track every ringgit and am happy to juggle multiple cards') + '\\n' +
+    '- Fixed monthly expenses: Insurance RM'+getVal('f_insurance')+', Subscriptions RM'+getVal('f_subs')+', Utilities RM'+getVal('f_utilities')+', Groceries RM'+getVal('f_groceries')+', Petrol RM'+getVal('f_petrol')+'\\n' +
+    '- Variable monthly expenses: Dining RM'+getVal('v_dining')+', Online shopping RM'+getVal('v_online')+', Retail shopping RM'+getVal('v_retail')+', Entertainment RM'+getVal('v_entertainment')+'\\n' +
+    '- Preferred card type: ' + type.charAt(0).toUpperCase()+type.slice(1) + '\\n' +
+    '- Annual income falls under: ' + (incomeTier==='entry'?'Entry-Level (RM2k–3k/month)':incomeTier==='mid'?'Mid-Tier (RM3k–5k/month)':'Premium (RM5k+/month)');
+
+  document.getElementById('promptBox').innerText = promptText.replace(/\\n/g,'\n');
+
+  document.getElementById('step1').style.display='none';
+  document.getElementById('step2').style.display='none';
+  document.getElementById('step3').style.display='none';
+  document.getElementById('resultsStep').style.display='block';
+  state.step = 4;
+  setProgress(4);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function copyPrompt(){
+  var text = document.getElementById('promptBox').innerText;
+  navigator.clipboard.writeText(text).then(function(){
+    var btn = document.querySelector('.copy-btn');
+    var orig = btn.innerText;
+    btn.innerText = 'Copied ✓';
+    setTimeout(function(){btn.innerText = orig;}, 1500);
+  });
+}
+
+setProgress(1);
+</script>
+
+</body>
+</html>
